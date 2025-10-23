@@ -1,0 +1,6 @@
+@DreamJournal.Api_HostAddress = http://localhost:5151
+
+GET {{DreamJournal.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

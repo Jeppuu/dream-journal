@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "b5WNTFEgStM1cAa1r+HThQr0rJs1XQUqOl4ydbVs0K4=",
+  "Source": "DreamJournal.Api",
+  "BasePath": "_content/DreamJournal.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
