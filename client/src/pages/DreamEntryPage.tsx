@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import type { DreamEntry } from "../types/DreamEntry";
-import DreamForm from "../components/DreamForm";
+import GreetingCard from "../components/GreetingCard";
 import DreamList from "../components/DreamList";
+import AddDreamDialog from "../components/AddDreamDialog";
+import { Paper, Box } from "@mui/material";
 
 const DreamEntryPage: React.FC = () => {
   const [entries, setEntries] = useState<DreamEntry[]>([]);
@@ -31,11 +33,15 @@ const DreamEntryPage: React.FC = () => {
   if (error) return <div className="error">{error}</div>;
 
   return (
-    <div>
-      <h1>Dream Journal</h1>
-      <DreamForm onEntryAdded={fetchEntries} />
+    <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
+      <Box className="greeting-row">
+        <GreetingCard userName="Dreamer" />
+        <div className="greeting-actions">
+          <AddDreamDialog onEntryAdded={fetchEntries} />
+        </div>
+      </Box>
       <DreamList entries={entries} />
-    </div>
+    </Paper>
   );
 };
 

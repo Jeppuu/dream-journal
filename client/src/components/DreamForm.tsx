@@ -1,20 +1,14 @@
 import React, { useState } from "react";
-import {
-  Box,
-  TextField,
-  Button,
-  Paper,
-  Typography,
-  Stack,
-} from "@mui/material";
+import { Box, TextField, Button, Stack } from "@mui/material";
 import type { DreamEntry } from "../types/DreamEntry";
 import axios from "axios";
 
 interface DreamFormProps {
   onEntryAdded: () => void;
+  onClose?: () => void;
 }
 
-const DreamForm: React.FC<DreamFormProps> = ({ onEntryAdded }) => {
+const DreamForm: React.FC<DreamFormProps> = ({ onEntryAdded, onClose }) => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -47,6 +41,7 @@ const DreamForm: React.FC<DreamFormProps> = ({ onEntryAdded }) => {
       await axios.post("/api/dreamentries", newEntry);
       setFormData({ title: "", description: "", mood: "" });
       onEntryAdded();
+      if (onClose) onClose();
     } catch (err) {
       console.error("Error adding dream entry:", err);
     } finally {
@@ -55,51 +50,48 @@ const DreamForm: React.FC<DreamFormProps> = ({ onEntryAdded }) => {
   };
 
   return (
-    <Paper
-      elevation={3}
-      sx={{
-        p: 3,
-        mt: 4,
-        backgroundColor: "background.paper",
-        borderRadius: 4,
-      }}
-    >
-      <Typography variant="h5" sx={{ mb: 2, color: "text.primary" }}>
-        Add new dream entry 🌙
-      </Typography>
+    <Box component="form" onSubmit={handleAddEntry} sx={{ mt: 1 }}>
+      <Stack spacing={2}>
+        <TextField
+          label="Title"
+          name="title"
+          variant="outlined"
+          value={formData.title}
+          onChange={handleInputChange}
+          fullWidth
+          required
+        />
 
-      <Box component="form" onSubmit={handleAddEntry}>
-        <Stack spacing={2}>
-          <TextField
-            label="Title"
-            name="title"
-            variant="outlined"
-            value={formData.title}
-            onChange={handleInputChange}
-            fullWidth
-            required
-          />
+        <TextField
+          label="Description"
+          name="description"
+          variant="outlined"
+          multiline
+          minRows={3}
+          value={formData.description}
+          onChange={handleInputChange}
+          fullWidth
+          required
+        />
 
-          <TextField
-            label="Description"
-            name="description"
-            variant="outlined"
-            multiline
-            minRows={3}
-            value={formData.description}
-            onChange={handleInputChange}
-            fullWidth
-            required
-          />
+        <TextField
+          label="Mood"
+          name="mood"
+          variant="outlined"
+          value={formData.mood}
+          onChange={handleInputChange}
+          fullWidth
+        />
 
-          <TextField
-            label="Mood"
-            name="mood"
-            variant="outlined"
-            value={formData.mood}
-            onChange={handleInputChange}
-            fullWidth
-          />
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}>
+          <Button
+            type="button"
+            onClick={onClose}
+            sx={{ mr: 1, textTransform: "none" }}
+            disabled={isSubmitting}
+          >
+            Cancel
+          </Button>
 
           <Button
             type="submit"
@@ -107,7 +99,6 @@ const DreamForm: React.FC<DreamFormProps> = ({ onEntryAdded }) => {
             color="primary"
             disabled={isSubmitting}
             sx={{
-              alignSelf: "flex-end",
               textTransform: "none",
               fontWeight: "bold",
               borderRadius: 3,
@@ -115,9 +106,9 @@ const DreamForm: React.FC<DreamFormProps> = ({ onEntryAdded }) => {
           >
             {isSubmitting ? "Saving..." : "Add Entry"}
           </Button>
-        </Stack>
-      </Box>
-    </Paper>
+        </Box>
+      </Stack>
+    </Box>
   );
 };
 

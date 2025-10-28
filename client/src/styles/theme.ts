@@ -11,7 +11,7 @@ const theme = createTheme({
     },
     background: {
       default: "#24273a", // Catppuccin Macchiato base
-      paper: "#1e2030",
+      paper: "#20223aff",
     },
     text: {
       primary: "#cad3f5",
