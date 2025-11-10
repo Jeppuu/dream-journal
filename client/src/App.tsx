@@ -1,5 +1,5 @@
 import "./App.css";
-import DreamEntryPage from "./pages/DreamEntryPage";
+import DreamEntryPage from "./pages/DreamsPage";
 
 const App = () => <DreamEntryPage />;
 

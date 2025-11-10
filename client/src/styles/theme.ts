@@ -24,6 +24,16 @@ const theme = createTheme({
   shape: {
     borderRadius: 12,
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: "uppercase",
+          width: "90%",
+        },
+      },
+    },
+  },
 });
 
 export default theme;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, TextField, Button, Stack } from "@mui/material";
-import type { DreamEntry } from "../types/DreamEntry";
+import type { DreamEntry } from "../../types/DreamEntry";
 import axios from "axios";
 
 interface DreamFormProps {
@@ -10,7 +10,6 @@ interface DreamFormProps {
 
 const DreamForm: React.FC<DreamFormProps> = ({ onEntryAdded, onClose }) => {
   const [formData, setFormData] = useState({
-    title: "",
     description: "",
     mood: "",
   });
@@ -28,7 +27,7 @@ const DreamForm: React.FC<DreamFormProps> = ({ onEntryAdded, onClose }) => {
 
   const handleAddEntry = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.title || !formData.description) return;
+    if (!formData.description) return;
 
     const newEntry: DreamEntry = {
       id: 0,
@@ -39,7 +38,7 @@ const DreamForm: React.FC<DreamFormProps> = ({ onEntryAdded, onClose }) => {
     setIsSubmitting(true);
     try {
       await axios.post("/api/dreamentries", newEntry);
-      setFormData({ title: "", description: "", mood: "" });
+      setFormData({ description: "", mood: "" });
       onEntryAdded();
       if (onClose) onClose();
     } catch (err) {
@@ -52,16 +51,6 @@ const DreamForm: React.FC<DreamFormProps> = ({ onEntryAdded, onClose }) => {
   return (
     <Box component="form" onSubmit={handleAddEntry} sx={{ mt: 1 }}>
       <Stack spacing={2}>
-        <TextField
-          label="Title"
-          name="title"
-          variant="outlined"
-          value={formData.title}
-          onChange={handleInputChange}
-          fullWidth
-          required
-        />
-
         <TextField
           label="Description"
           name="description"

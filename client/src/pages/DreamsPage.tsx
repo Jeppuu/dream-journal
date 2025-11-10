@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import type { DreamEntry } from "../types/DreamEntry";
-import GreetingCard from "../components/GreetingCard";
-import DreamList from "../components/DreamList";
-import AddDreamDialog from "../components/AddDreamDialog";
+import GreetingCard from "../components/layout/GreetingCard";
+import DreamList from "../components/dreams/DreamList";
+import AddDreamDialog from "../components/dreams/AddDreamDialog";
 import { Paper, Box } from "@mui/material";
 
-const DreamEntryPage: React.FC = () => {
+const DreamsPage: React.FC = () => {
   const [entries, setEntries] = useState<DreamEntry[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -45,4 +45,4 @@ const DreamEntryPage: React.FC = () => {
   );
 };
 
-export default DreamEntryPage;
+export default DreamsPage;

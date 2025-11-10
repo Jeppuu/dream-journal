@@ -35,3 +35,12 @@
 /home/jeppu/code/dream-journal/server/DreamJournal.Api/bin/Debug/net9.0/Swashbuckle.AspNetCore.Swagger.dll
 /home/jeppu/code/dream-journal/server/DreamJournal.Api/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
 /home/jeppu/code/dream-journal/server/DreamJournal.Api/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+/home/jeppu/code/dream-journal/server/DreamJournal.Api/bin/Debug/net9.0/BCrypt.Net-Next.dll
+/home/jeppu/code/dream-journal/server/DreamJournal.Api/bin/Debug/net9.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/home/jeppu/code/dream-journal/server/DreamJournal.Api/bin/Debug/net9.0/Microsoft.IdentityModel.Abstractions.dll
+/home/jeppu/code/dream-journal/server/DreamJournal.Api/bin/Debug/net9.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/home/jeppu/code/dream-journal/server/DreamJournal.Api/bin/Debug/net9.0/Microsoft.IdentityModel.Logging.dll
+/home/jeppu/code/dream-journal/server/DreamJournal.Api/bin/Debug/net9.0/Microsoft.IdentityModel.Protocols.dll
+/home/jeppu/code/dream-journal/server/DreamJournal.Api/bin/Debug/net9.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/home/jeppu/code/dream-journal/server/DreamJournal.Api/bin/Debug/net9.0/Microsoft.IdentityModel.Tokens.dll
+/home/jeppu/code/dream-journal/server/DreamJournal.Api/bin/Debug/net9.0/System.IdentityModel.Tokens.Jwt.dll

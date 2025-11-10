@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DreamJournal.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1d4701adbb3e229fae84ecf23cfed208a85e1eb0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+34899432af7e388ad3cd4d4efec96c1bf7142346")]
 [assembly: System.Reflection.AssemblyProductAttribute("DreamJournal.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DreamJournal.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

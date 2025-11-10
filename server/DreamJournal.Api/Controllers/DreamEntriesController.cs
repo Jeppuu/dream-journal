@@ -10,8 +10,8 @@ namespace DreamJournal.Api.Controllers
     {
         private static readonly List<DreamEntry> DreamEntries = new()
         {
-            new DreamEntry { Id = 1, Date = DateTime.UtcNow.AddDays(-1), Title = "Flying in the sky", Description = "I was flying over mountains and rivers.", Mood = "Excited" },
-            new DreamEntry { Id = 2, Date = DateTime.UtcNow.AddDays(-2), Title = "Lost in a maze", Description = "I couldn't find my way out of a complex maze.", Mood = "Anxious" }
+            new DreamEntry { Id = 1, Date = DateTime.UtcNow.AddDays(-1), Description = "I was flying over mountains and rivers.", Mood = "Excited" },
+            new DreamEntry { Id = 2, Date = DateTime.UtcNow.AddDays(-2), Description = "I couldn't find my way out of a complex maze.", Mood = "Anxious" }
         };
         private static int _nextId = 3;
 
@@ -50,7 +50,6 @@ namespace DreamJournal.Api.Controllers
             }
 
             entry.Date = updatedEntry.Date;
-            entry.Title = updatedEntry.Title;
             entry.Description = updatedEntry.Description;
             entry.Mood = updatedEntry.Mood;
 
