@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../services/api";
 import type { User, UserLoginData, UserSignupData } from "../types/User";
 import { AuthContext } from "./AuthContextValue";
 
@@ -12,7 +12,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       fetchUser();
     } else {
       setIsLoading(false);
@@ -21,34 +20,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const fetchUser = async () => {
     try {
-      const { data } = await axios.get<User>("/api/auth/user");
+      const { data } = await api.get<User>("/api/auth/user");
       setUser(data);
     } catch (error) {
-      console.error("Failed to fetch user:", error);
+      console.warn("Token invalid or expired. Clearing storage.");
       localStorage.removeItem("token");
-      delete axios.defaults.headers.common["Authorization"];
     } finally {
       setIsLoading(false);
     }
   };
 
   const login = async (credentials: UserLoginData) => {
-    const { data } = await axios.post("/api/auth/login", credentials);
+    const { data } = await api.post("/api/auth/login", credentials);
     localStorage.setItem("token", data.token);
-    axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
     await fetchUser();
   };
 
   const signup = async (userData: UserSignupData) => {
-    const { data } = await axios.post("/api/auth/signup", userData);
+    const { data } = await api.post("/api/auth/signup", userData);
     localStorage.setItem("token", data.token);
-    axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
     await fetchUser();
   };
 
   const logout = async () => {
     localStorage.removeItem("token");
-    delete axios.defaults.headers.common["Authorization"];
     setUser(null);
   };
 
@@ -61,6 +56,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         login,
         signup,
         logout,
+        fetchCurrentUser: fetchUser,
       }}
     >
       {children}

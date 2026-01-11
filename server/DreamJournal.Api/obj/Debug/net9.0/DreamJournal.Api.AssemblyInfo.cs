@@ -10,10 +10,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("28278ca4-ee0f-41e2-81e4-b4f63d4dded2")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("DreamJournal.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+34899432af7e388ad3cd4d4efec96c1bf7142346")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c5e146a6a62ad358977973062a04038684ccb073")]
 [assembly: System.Reflection.AssemblyProductAttribute("DreamJournal.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DreamJournal.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

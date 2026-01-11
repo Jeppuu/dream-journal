@@ -6,8 +6,27 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:5173", "http://localhost:3000")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+});
+
+// Add services to the container
 builder.Services.AddControllers();
+
+// Configure JSON camel case serialization
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+});
 
 // Get and validate JWT key
 var jwtKey = builder.Configuration["Jwt:Key"];
@@ -15,8 +34,26 @@ if (string.IsNullOrWhiteSpace(jwtKey))
 {
     throw new InvalidOperationException("JWT configuration missing: set 'Jwt:Key' in appsettings.json or as an environment variable.");
 }
-var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
 
+// Decode JWT key using the same logic as GenerateJwtToken
+byte[] keyBytes;
+try
+{
+    // Try to decode as base64 first (recommended for stored secrets)
+    keyBytes = Convert.FromBase64String(jwtKey);
+}
+catch (FormatException)
+{
+    // Fallback to UTF-8 bytes for plain string keys
+    keyBytes = Encoding.UTF8.GetBytes(jwtKey);
+}
+
+if (keyBytes.Length < 32)
+{
+    throw new InvalidOperationException($"Jwt:Key is too short ({keyBytes.Length} bytes). Provide at least 32 bytes (256 bits) for HS256.");
+}
+
+var signingKey = new SymmetricSecurityKey(keyBytes);
 
 // Add JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -30,9 +67,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
-            )
+            IssuerSigningKey = signingKey
         };
     });
 
@@ -44,6 +79,9 @@ builder.Services.AddScoped<UserService>();
 
 
 var app = builder.Build();
+
+// Use CORS BEFORE routing
+app.UseCors("AllowFrontend");
 
 // Use authentication & authorization
 app.UseAuthentication();

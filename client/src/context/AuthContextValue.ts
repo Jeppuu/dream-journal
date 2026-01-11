@@ -8,6 +8,7 @@ export interface AuthContextType {
   login: (data: UserLoginData) => Promise<void>;
   signup: (data: UserSignupData) => Promise<void>;
   logout: () => Promise<void>;
+  fetchCurrentUser: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
