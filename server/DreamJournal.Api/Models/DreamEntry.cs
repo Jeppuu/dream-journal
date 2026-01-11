@@ -5,5 +5,9 @@ namespace DreamJournal.Api.Models {
         public DateTime Date { get; set; }
         public string Description { get; set; } = string.Empty;
         public string Mood { get; set; } = string.Empty;
+        public string UserId { get; set; } = string.Empty;
+
+        // Navigation property
+        public User? User { get; set; }
     }
 }

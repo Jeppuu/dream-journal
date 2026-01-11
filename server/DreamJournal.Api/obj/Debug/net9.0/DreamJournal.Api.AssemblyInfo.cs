@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DreamJournal.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c5e146a6a62ad358977973062a04038684ccb073")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b926f00d12bd51efab098729f781919bebe47c5d")]
 [assembly: System.Reflection.AssemblyProductAttribute("DreamJournal.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DreamJournal.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

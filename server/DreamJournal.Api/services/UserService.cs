@@ -3,65 +3,66 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DreamJournal.Api.Models;
+using DreamJournal.Api.Repositories;
 
 namespace DreamJournal.Api.Services
 {
     /// <summary>
-    /// Minimal in-memory user service. Replace with a persistence-backed implementation later.
+    /// User service backed by database persistence using the repository pattern.
     /// </summary>
     public class UserService
     {
-        private static readonly List<User> Users = new();
-        private static readonly object Sync = new();
+        private readonly IUserRepository _userRepository;
 
-        public Task<bool> EmailExists(string email)
+        public UserService(IUserRepository userRepository)
         {
-            if (string.IsNullOrWhiteSpace(email)) return Task.FromResult(false);
-            var exists = Users.Any(u => u.Email.Equals(email.Trim(), StringComparison.OrdinalIgnoreCase));
-            return Task.FromResult(exists);
+            _userRepository = userRepository;
         }
 
-        public Task CreateUser(User user)
+        public async Task<bool> EmailExists(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email)) return false;
+            var user = await _userRepository.GetByEmailAsync(email.Trim());
+            return user != null;
+        }
+
+        public async Task CreateUser(User user)
         {
             if (user == null) throw new ArgumentNullException(nameof(user));
-            lock (Sync)
-            {
-                if (Users.Any(u => u.Email.Equals(user.Email, StringComparison.OrdinalIgnoreCase)))
-                    throw new InvalidOperationException("Email already registered.");
+            
+            var existingUser = await _userRepository.GetByEmailAsync(user.Email);
+            if (existingUser != null)
+                throw new InvalidOperationException("Email already registered.");
 
-                Users.Add(user);
-            }
-            return Task.CompletedTask;
+            await _userRepository.AddAsync(user);
         }
 
-        public Task<User?> GetUserByEmail(string email)
+        public async Task<User?> GetUserByEmail(string email)
         {
-            if (string.IsNullOrWhiteSpace(email)) return Task.FromResult<User?>(null);
-            var user = Users.FirstOrDefault(u => u.Email.Equals(email.Trim(), StringComparison.OrdinalIgnoreCase));
-            return Task.FromResult(user);
+            if (string.IsNullOrWhiteSpace(email)) return null;
+            return await _userRepository.GetByEmailAsync(email.Trim());
         }
 
-        public Task<User?> GetUserById(string id)
+        public async Task<User?> GetUserById(string id)
         {
-            if (string.IsNullOrWhiteSpace(id)) return Task.FromResult<User?>(null);
-            var user = Users.FirstOrDefault(u => u.Id == id);
-            return Task.FromResult(user);
+            if (string.IsNullOrWhiteSpace(id)) return null;
+            return await _userRepository.GetByIdAsync(id);
         }
 
         /// <summary>
         /// Verifies credentials using the stored PasswordHash (BCrypt).
         /// Returns the user on success, null on failure.
         /// </summary>
-        public Task<User?> ValidateCredentialsAsync(string email, string password)
+        public async Task<User?> ValidateCredentialsAsync(string email, string password)
         {
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
-                return Task.FromResult<User?>(null);
+                return null;
 
-            var user = Users.FirstOrDefault(u => u.Email.Equals(email.Trim(), StringComparison.OrdinalIgnoreCase));
-            if (user == null) return Task.FromResult<User?>(null);
+            var user = await _userRepository.GetByEmailAsync(email.Trim());
+            if (user == null) return null;
 
             var valid = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
-            return Task.FromResult(valid ? user : null);
+            return valid ? user : null;
         }
     }
 }

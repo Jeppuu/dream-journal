@@ -1,6 +1,9 @@
+using DreamJournal.Api.Data;
 using DreamJournal.Api.Models;
+using DreamJournal.Api.Repositories;
 using DreamJournal.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -27,6 +30,17 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
 });
+
+// Add Entity Framework Core DbContext
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found in configuration.");
+
+builder.Services.AddDbContext<DreamJournalDbContext>(options =>
+    options.UseSqlite(connectionString));
+
+// Register repositories
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IDreamEntryRepository, DreamEntryRepository>();
 
 // Get and validate JWT key
 var jwtKey = builder.Configuration["Jwt:Key"];
@@ -79,6 +93,13 @@ builder.Services.AddScoped<UserService>();
 
 
 var app = builder.Build();
+
+// Ensure database is created on startup (useful for local development without dotnet-ef)
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<DreamJournalDbContext>();
+    db.Database.EnsureCreated();
+}
 
 // Use CORS BEFORE routing
 app.UseCors("AllowFrontend");

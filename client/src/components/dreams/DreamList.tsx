@@ -5,9 +5,11 @@ import DreamCard from "./DreamCard";
 
 interface DreamListProps {
   entries: DreamEntry[];
+  onEdit?: (entry: DreamEntry) => void;
+  onDelete?: (id: number) => void;
 }
 
-const DreamList: React.FC<DreamListProps> = ({ entries }) => {
+const DreamList: React.FC<DreamListProps> = ({ entries, onEdit, onDelete }) => {
   if (!entries.length)
     return (
       <Typography
@@ -32,7 +34,7 @@ const DreamList: React.FC<DreamListProps> = ({ entries }) => {
       </Typography>
       <Stack spacing={2}>
         {entries.map((entry) => (
-          <DreamCard key={entry.id} entry={entry} />
+          <DreamCard key={entry.id} entry={entry} onEdit={onEdit} onDelete={onDelete} />
         ))}
       </Stack>
     </Box>

@@ -5,13 +5,16 @@ import App from "./App.tsx";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import theme from "./styles/theme.ts";
 import { AuthProvider } from "./context/AuthContext";
+import { ToastProvider } from "./context/ToastContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AuthProvider>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <App />
+        <ToastProvider>
+          <CssBaseline />
+          <App />
+        </ToastProvider>
       </ThemeProvider>
     </AuthProvider>
   </StrictMode>

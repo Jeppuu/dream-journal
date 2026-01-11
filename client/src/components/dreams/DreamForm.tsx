@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 import { Box, TextField, Button, Stack } from "@mui/material";
 import type { DreamEntry } from "../../types/DreamEntry";
-import axios from "axios";
+import { useToast } from "../../context/ToastContext";
 
 interface DreamFormProps {
-  onEntryAdded: () => void;
+  onSubmit: (entry: Partial<DreamEntry>) => Promise<any>;
   onClose?: () => void;
+  initial?: Partial<DreamEntry>;
 }
 
-const DreamForm: React.FC<DreamFormProps> = ({ onEntryAdded, onClose }) => {
+const DreamForm: React.FC<DreamFormProps> = ({ onSubmit, onClose, initial }) => {
   const [formData, setFormData] = useState({
-    description: "",
-    mood: "",
+    description: initial?.description ?? "",
+    mood: initial?.mood ?? "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const showToast = useToast();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -37,12 +39,13 @@ const DreamForm: React.FC<DreamFormProps> = ({ onEntryAdded, onClose }) => {
 
     setIsSubmitting(true);
     try {
-      await axios.post("/api/dreamentries", newEntry);
+      await onSubmit(newEntry);
       setFormData({ description: "", mood: "" });
-      onEntryAdded();
+      showToast({ message: "Saved", severity: "success" });
       if (onClose) onClose();
     } catch (err) {
       console.error("Error adding dream entry:", err);
+      showToast({ message: "Failed to save entry", severity: "error" });
     } finally {
       setIsSubmitting(false);
     }
@@ -93,7 +96,7 @@ const DreamForm: React.FC<DreamFormProps> = ({ onEntryAdded, onClose }) => {
               borderRadius: 3,
             }}
           >
-            {isSubmitting ? "Saving..." : "Add Entry"}
+            {isSubmitting ? "Saving..." : "Save"}
           </Button>
         </Box>
       </Stack>

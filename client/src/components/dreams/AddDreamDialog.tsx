@@ -3,12 +3,12 @@ import { Button, Dialog, DialogTitle, DialogContent } from "@mui/material";
 import DreamForm from "./DreamForm";
 
 interface AddDreamDialogProps {
-  onEntryAdded: () => void;
+  onSave: (entry: Partial<import("../../types/DreamEntry").DreamEntry>) => Promise<any>;
   buttonLabel?: string;
 }
 
 const AddDreamDialog: React.FC<AddDreamDialogProps> = ({
-  onEntryAdded,
+  onSave,
   buttonLabel = "+ Add new dream",
 }) => {
   const [open, setOpen] = useState(false);
@@ -31,12 +31,7 @@ const AddDreamDialog: React.FC<AddDreamDialogProps> = ({
       <Dialog open={open} onClose={closeDialog} fullWidth maxWidth="sm">
         <DialogTitle>Add new dream entry</DialogTitle>
         <DialogContent>
-          <DreamForm
-            onEntryAdded={() => {
-              onEntryAdded();
-            }}
-            onClose={closeDialog}
-          />
+          <DreamForm onSubmit={onSave} onClose={closeDialog} />
         </DialogContent>
       </Dialog>
     </>
